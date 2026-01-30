@@ -21,5 +21,7 @@ Thumbs.db
 
 # HBuilderX / uni-app
 .hbuilderx/
+#接口文档
+小程序模块前端接口文档.md
 
 

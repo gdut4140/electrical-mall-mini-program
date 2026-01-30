@@ -1,0 +1,24 @@
+{
+  "name": "electrical-mall-mini-program",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gdut4140/electrical-mall-mini-program.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/gdut4140/electrical-mall-mini-program/issues"
+  },
+  "homepage": "https://github.com/gdut4140/electrical-mall-mini-program#readme",
+  "dependencies": {
+    "axios": "^1.13.4"
+  }
+}
