@@ -14,7 +14,6 @@
 		<view class="action-row">
 			<button class="action-btn" @click="loginWithWechat">微信认证登录</button>
 			<button class="action-btn outline" @click="openQrcode">企业认证二维码</button>
-			<button class="action-btn outline" @click="openAd">广告</button>
 		</view>
 
 		<!-- Points Card -->
@@ -54,14 +53,6 @@
 			</view>
 		</view>
 
-		<!-- Ad Popup -->
-		<view v-if="showAd" class="popup-mask" @click="closeAd">
-			<view class="popup" @click.stop>
-				<text class="popup-title">广告</text>
-				<image src="/static/advertise.jpg" class="popup-image" mode="widthFix"></image>
-				<button class="popup-btn" @click="closeAd">关闭</button>
-			</view>
-		</view>
 		<CustomTabbar active="user" />
 	</view>
 </template>
@@ -81,7 +72,6 @@ const loading = ref(false);
 const finished = ref(false);
 const qrcodeUrl = ref('');
 const showQrcode = ref(false);
-const showAd = ref(false);
 
 const loginWithWechat = async () => {
 	try {
@@ -140,14 +130,6 @@ const openQrcode = () => {
 
 const closeQrcode = () => {
 	showQrcode.value = false;
-};
-
-const openAd = () => {
-	showAd.value = true;
-};
-
-const closeAd = () => {
-	showAd.value = false;
 };
 
 const initQrcode = async () => {

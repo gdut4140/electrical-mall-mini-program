@@ -36,6 +36,7 @@ const switchTo = (url, key) => {
     left: 0;
     right: 0;
     bottom: 0;
+    width: 100vw;
     height: calc(60px + env(safe-area-inset-bottom));
     padding-bottom: env(safe-area-inset-bottom);
     display: flex;
@@ -44,7 +45,7 @@ const switchTo = (url, key) => {
     background: #fff;
     border-top: 1px solid #eee;
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.04);
-    z-index: 999;
+    z-index: 2000;
     box-sizing: border-box;
 }
 

@@ -83,6 +83,9 @@
 			</view>
 		</view>
 
+		<!-- Small Ad Trigger -->
+		<view class="ad-fab" @click="openAd">广告</view>
+
 		<CustomTabbar active="home" />
 	</view>
 </template>
@@ -244,5 +247,22 @@ getHealth();
 	color: #fff;
 	border-radius: 20px;
 	font-size: 14px;
+}
+
+.ad-fab {
+	position: fixed;
+	right: 16px;
+	bottom: 110px;
+	width: 48px;
+	height: 48px;
+	border-radius: 24px;
+	background: #ffb300;
+	color: #fff;
+	font-size: 12px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+	z-index: 900;
 }
 </style>
