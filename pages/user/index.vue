@@ -2,17 +2,22 @@
 	<view class="container page">
 		<!-- User Header -->
 		<view class="user-header">
-			<view class="avatar">
-				<uni-icons type="person-filled" size="45" color="#fff"></uni-icons>
+			<view class="user-main">
+				<view class="avatar">
+					<uni-icons type="person-filled" size="45" color="#fff"></uni-icons>
+				</view>
+				<view class="user-info">
+					<text class="user-name">{{ profile.nickname || '微信用户' }}</text>
+					<text class="user-role">{{ profile.phone || '尊敬的会员' }}</text>
+				</view>
 			</view>
-			<view class="user-info">
-				<text class="user-name">{{ profile.nickname || '微信用户' }}</text>
-				<text class="user-role">{{ profile.phone || '尊敬的会员' }}</text>
-			</view>
+			<button v-if="isLoggedIn" class="logout-btn" @click="handleLogout">退出登录</button>
 		</view>
 
 		<view class="action-row">
-			<button class="action-btn" @click="loginWithWechat">微信认证登录</button>
+			<button class="action-btn" open-type="getPhoneNumber" @getphonenumber="handlePhoneLogin">
+				微信手机号一键登录
+			</button>
 			<button class="action-btn outline" @click="openQrcode">企业认证二维码</button>
 		</view>
 
@@ -61,7 +66,8 @@
 import { ref } from 'vue';
 import { onShow } from '@dcloudio/uni-app';
 import CustomTabbar from '@/components/CustomTabbar.vue';
-import { wechatLogin, getMemberProfile, getPointsRecords, getWechatQrcode } from '@/api/apiMethods';
+import api from '@/api/api';
+import { getMemberProfile, getPointsRecords, getWechatQrcode } from '@/api/apiMethods';
 
 const profile = ref({});
 const history = ref([]);
@@ -72,9 +78,15 @@ const loading = ref(false);
 const finished = ref(false);
 const qrcodeUrl = ref('');
 const showQrcode = ref(false);
+const isLoggedIn = ref(false);
 
-const loginWithWechat = async () => {
+const handlePhoneLogin = async (event) => {
 	try {
+		const phoneCode = event?.detail?.code;
+		if (!phoneCode) {
+			uni.showToast({ title: '获取手机号失败', icon: 'none' });
+			return;
+		}
 		const code = await new Promise((resolve, reject) => {
 			uni.login({
 				provider: 'weixin',
@@ -82,13 +94,28 @@ const loginWithWechat = async () => {
 				fail: reject
 			});
 		});
-		const data = await wechatLogin({ code });
+		const data = await api.post('/auth/wechat-phone-login', {
+			phoneCode,
+			loginCode: code
+		});
 		uni.setStorageSync('token', data.token);
+		profile.value = data.memberInfo || profile.value;
+		isLoggedIn.value = true;
 		await loadProfile();
 		resetAndFetch();
 	} catch (error) {
 		uni.showToast({ title: '登录失败', icon: 'none' });
 	}
+};
+
+const handleLogout = () => {
+	uni.removeStorageSync('token');
+	profile.value = {};
+	history.value = [];
+	page.value = 1;
+	finished.value = false;
+	isLoggedIn.value = false;
+	uni.showToast({ title: '已退出登录', icon: 'none' });
 };
 
 const loadProfile = async () => {
@@ -140,10 +167,13 @@ onShow(() => {
 	uni.hideTabBar({ animation: false });
 	const token = uni.getStorageSync('token');
 	if (token) {
+		isLoggedIn.value = true;
 		loadProfile();
 		if (!history.value.length) {
 			resetAndFetch();
 		}
+	} else {
+		isLoggedIn.value = false;
 	}
 });
 
@@ -160,7 +190,13 @@ initQrcode();
 .user-header {
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	margin-bottom: 25px;
+
+	.user-main {
+		display: flex;
+		align-items: center;
+	}
 
 	.avatar {
 		width: 65px;
@@ -191,6 +227,16 @@ initQrcode();
 			font-size: 14px;
 			color: #666;
 		}
+	}
+
+	.logout-btn {
+		background: #e53935;
+		color: #fff;
+		border-radius: 16px;
+		font-size: 12px;
+		line-height: 2.2;
+		padding: 0 12px;
+		margin: 0;
 	}
 }
 
