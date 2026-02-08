@@ -83,6 +83,11 @@
             </view>
         </view>
 
+        <!-- Small Ad Trigger -->
+        <view class="ad-fab" @click="openAd">
+            <image src="/static/advertise.jpg" class="ad-fab-image" mode="aspectFill"></image>
+        </view>
+
         <CustomTabbar active="points" />
     </view>
 </template>
@@ -242,5 +247,26 @@ initQrcode();
     color: #fff;
     border-radius: 20px;
     font-size: 14px;
+}
+
+.ad-fab {
+    position: fixed;
+    right: 16px;
+    bottom: 110px;
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    background: #ffb300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+    z-index: 900;
+}
+
+.ad-fab-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
 }
 </style>
