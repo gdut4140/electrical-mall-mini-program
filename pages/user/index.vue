@@ -80,6 +80,8 @@ const qrcodeUrl = ref('');
 const showQrcode = ref(false);
 const isLoggedIn = ref(false);
 
+const wechatMobileLogin = (code) => api.post('/auth/wechat-mobile-login', { code });
+
 const handlePhoneLogin = async (event) => {
 	try {
 		const phoneCode = event?.detail?.code;
@@ -87,17 +89,7 @@ const handlePhoneLogin = async (event) => {
 			uni.showToast({ title: '获取手机号失败', icon: 'none' });
 			return;
 		}
-		const code = await new Promise((resolve, reject) => {
-			uni.login({
-				provider: 'weixin',
-				success: (res) => resolve(res.code),
-				fail: reject
-			});
-		});
-		const data = await api.post('/auth/wechat-phone-login', {
-			phoneCode,
-			loginCode: code
-		});
+		const data = await wechatMobileLogin(phoneCode);
 		uni.setStorageSync('token', data.token);
 		profile.value = data.memberInfo || profile.value;
 		isLoggedIn.value = true;

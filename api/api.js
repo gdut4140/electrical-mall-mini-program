@@ -253,6 +253,10 @@ const mockAdapter = (config) => {
         return ok({ token: 'mock-token-456', memberInfo: MOCK_MEMBER, isNewUser: false });
     }
 
+    if (url === '/auth/wechat-mobile-login' && method === 'POST') {
+        return ok({ token: 'mock-token-789', memberInfo: MOCK_MEMBER, isNewUser: false });
+    }
+
     if (url === '/members/profile' && method === 'GET') {
         return ok(MOCK_MEMBER);
     }
